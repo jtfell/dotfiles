@@ -1,0 +1,8 @@
+- name: start Nginx
+  service: name=nginx state=started
+
+- name: start Redis
+  service: name=redis-server state=started
+
+- name: start Postgres
+  service: name=postgres state=started
