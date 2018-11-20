@@ -51,46 +51,23 @@ ZSH_THEME="lambda"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-nvm zsh-syntax-highlighting)
+plugins=(git zsh-nvm zsh-syntax-highlighting ssh-agent)
 
 # User configuration
-
 source $ZSH/oh-my-zsh.sh
 
 # Set architecture flags
 export ARCHFLAGS="-arch x86_64"
 # Ensure user-installed binaries take precedence
 export PATH=/usr/local/bin:$PATH
-# Allow NuGet.exe to run
-export EnableNuGetPackageRestore=true
 # Load .bashrc if it exists
 test -f ~/.bashrc && source ~/.bashrc
 
-# Add npm global packages to path
-export PATH="$HOME/.node/bin:$PATH"
-# Add stack global packages to path
-export PATH="$HOME/.local/bin:$PATH"
-
-export PATH="/usr/local/sbin:$PATH"
-
-export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/lib:$PATH"
+export PATH="/user/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/lib:$PATH"
 export MANPATH="/usr/local/man:$MANPATH"
-
- # This loads NVM
- [ -s $HOME/.nvm/nvm.sh ] && . $HOME/.nvm/nvm.sh
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
 
 # ssh
 # export SSH_KEY_PATH="~/.ssh/dsa_id"
@@ -106,3 +83,34 @@ export MANPATH="/usr/local/man:$MANPATH"
 alias npm-linked="ls -F node_modules | sed -n 's/@$//p' | xargs npm ls -g --depth 0"
 
 prompt_context () { }
+
+#
+# PYTHON
+#
+
+# activate virtualenvwrapper
+source /usr/local/bin/virtualenvwrapper.sh
+
+# pip should only run if there is a virtualenv currently activated
+export PIP_REQUIRE_VIRTUALENV=true
+
+# create commands to override pip restriction.
+# use `gpip` or `gpip3` to force installation of
+# a package in the global python environment
+gpip(){
+  PIP_REQUIRE_VIRTUALENV="" pip "$@"
+}
+gpip3(){
+  PIP_REQUIRE_VIRTUALENV="" pip3 "$@"
+}
+
+#
+# NODE
+#
+
+# Add npm global packages to path
+export PATH="$HOME/.node/bin:$PATH"
+alias npm-linked="\ls -F node_modules | sed -n 's/@$//p' | xargs npm ls -g --depth 0";
+
+# This loads NVM
+[ -s $HOME/.nvm/nvm.sh ] && . $HOME/.nvm/nvm.sh
