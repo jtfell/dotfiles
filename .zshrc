@@ -64,7 +64,12 @@ export PATH=/usr/local/bin:$PATH
 test -f ~/.bashrc && source ~/.bashrc
 
 export PATH="/user/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/lib:$PATH"
+export PATH="/Users/jtfell/.local/bin:$PATH"
+export PATH=$(brew --prefix openssl)/bin:$PATH
 export MANPATH="/usr/local/man:$MANPATH"
+
+bindkey "^[[1;5C" forward-word  
+bindkey "^[[1;5D" backward-word
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -81,15 +86,36 @@ export MANPATH="/usr/local/man:$MANPATH"
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 alias npm-linked="ls -F node_modules | sed -n 's/@$//p' | xargs npm ls -g --depth 0"
+alias ag="rg"
+alias kill-port="lsof -i tcp:1337 | tail -1 | cut -d' ' -f5 | xargs kill -9"
+alias ga="git add -A"
+alias gc="git commit"
+alias gl="git log --graph --decorate --pretty=oneline --abbrev-commit --all"
+alias gssh='gcloud beta compute --project "cogntive-analytics" ssh --zone "australia-southeast1-b" "jtfell-dev"'
+alias pdalssh='gcloud beta compute --project "cogntive-analytics" ssh --zone "australia-southeast1-b" "pdal"'
+alias pdalssh2='gcloud beta compute --project "cogntive-analytics" ssh --zone "australia-southeast1-b" "pdal2"'
 
 prompt_context () { }
 
+# branches that were touched lately 
+nb() {
+  git for-each-ref --sort=-committerdate refs/heads/ -- format='%(committerdate:short) %(authorname) %(refname:short)' | head -n 10
+}
+
+# open pr page on github for current branch
+pr () {
+  local repo=`git remote -v | grep -m 1 "(push)" | sed -e "s/.*github.com[:/]\(.*\)\.git.*/\1/"`
+  local branch=`git name-rev --name-only HEAD`
+  echo "... creating pull request for branch \"$branch\" in \"$repo\""
+  open "https://github.com/$repo/pull/new/$branch?expand=1"
+}
+
 #
-# PYTHON
+# Python
 #
 
 # activate virtualenvwrapper
-source /usr/local/bin/virtualenvwrapper.sh
+# source /usr/local/bin/virtualenvwrapper.sh
 
 # pip should only run if there is a virtualenv currently activated
 export PIP_REQUIRE_VIRTUALENV=true
@@ -114,3 +140,6 @@ alias npm-linked="\ls -F node_modules | sed -n 's/@$//p' | xargs npm ls -g --dep
 
 # This loads NVM
 [ -s $HOME/.nvm/nvm.sh ] && . $HOME/.nvm/nvm.sh
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
