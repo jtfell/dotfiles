@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/jtfell/.oh-my-zsh
+export ZSH=/home/jtfell/.oh-my-zsh
 
 DEFAULT_USER="jtfell"
 
@@ -56,17 +56,12 @@ plugins=(git zsh-nvm zsh-syntax-highlighting ssh-agent)
 # User configuration
 source $ZSH/oh-my-zsh.sh
 
-# Set architecture flags
-export ARCHFLAGS="-arch x86_64"
 # Ensure user-installed binaries take precedence
 export PATH=/usr/local/bin:$PATH
+export PATH=~/.local/bin:$PATH
+
 # Load .bashrc if it exists
 test -f ~/.bashrc && source ~/.bashrc
-
-export PATH="/user/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/lib:$PATH"
-export PATH="/Users/jtfell/.local/bin:$PATH"
-export PATH=$(brew --prefix openssl)/bin:$PATH
-export MANPATH="/usr/local/man:$MANPATH"
 
 bindkey "^[[1;5C" forward-word  
 bindkey "^[[1;5D" backward-word
@@ -81,19 +76,15 @@ bindkey "^[[1;5D" backward-word
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
 alias npm-linked="ls -F node_modules | sed -n 's/@$//p' | xargs npm ls -g --depth 0"
 alias ag="rg"
 alias kill-port="lsof -i tcp:1337 | tail -1 | cut -d' ' -f5 | xargs kill -9"
 alias ga="git add -A"
 alias gc="git commit"
 alias gl="git log --graph --decorate --pretty=oneline --abbrev-commit --all"
-alias gssh='gcloud beta compute --project "cogntive-analytics" ssh --zone "australia-southeast1-b" "jtfell-dev"'
-alias pdalssh='gcloud beta compute --project "cogntive-analytics" ssh --zone "australia-southeast1-b" "pdal"'
-alias pdalssh2='gcloud beta compute --project "cogntive-analytics" ssh --zone "australia-southeast1-b" "pdal2"'
+
+alias pbcopy='xclip -selection clipboard'
+alias pbpaste='xclip -selection clipboard -o'
 
 prompt_context () { }
 
@@ -107,36 +98,12 @@ pr () {
   local repo=`git remote -v | grep -m 1 "(push)" | sed -e "s/.*github.com[:/]\(.*\)\.git.*/\1/"`
   local branch=`git name-rev --name-only HEAD`
   echo "... creating pull request for branch \"$branch\" in \"$repo\""
-  open "https://github.com/$repo/pull/new/$branch?expand=1"
-}
-
-#
-# Python
-#
-
-# activate virtualenvwrapper
-# source /usr/local/bin/virtualenvwrapper.sh
-
-# pip should only run if there is a virtualenv currently activated
-export PIP_REQUIRE_VIRTUALENV=true
-
-# create commands to override pip restriction.
-# use `gpip` or `gpip3` to force installation of
-# a package in the global python environment
-gpip(){
-  PIP_REQUIRE_VIRTUALENV="" pip "$@"
-}
-gpip3(){
-  PIP_REQUIRE_VIRTUALENV="" pip3 "$@"
+  chromium "https://github.com/$repo/pull/new/$branch?expand=1"
 }
 
 #
 # NODE
 #
-
-# Add npm global packages to path
-export PATH="$HOME/.node/bin:$PATH"
-alias npm-linked="\ls -F node_modules | sed -n 's/@$//p' | xargs npm ls -g --depth 0";
 
 # This loads NVM
 [ -s $HOME/.nvm/nvm.sh ] && . $HOME/.nvm/nvm.sh

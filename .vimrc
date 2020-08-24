@@ -1,6 +1,7 @@
 " Syntax highlighting
 syntax on
-colorscheme despacio
+let g:despacio_Sunset = 1
+colorscheme miramare
 set guifont=Inconsolata
 
 " Set line numbers relative to current position
@@ -23,17 +24,20 @@ call plug#begin('~/.vim/plugged')
 "
 " General plugins
 "
-Plug '/usr/local/opt/fzf'
+Plug '/usr/bin/fzf'
 Plug 'junegunn/fzf.vim'
+source /usr/share/doc/fzf/examples/fzf.vim
+
 Plug 'w0rp/ale'
 Plug 'itchyny/lightline.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'tomtom/tcomment_vim'
 
 " Lang-specific plugins
-Plug 'leafgarland/typescript-vim'
+Plug 'HerringtonDarkholme/yats.vim'
 Plug 'rust-lang/rust.vim'
 Plug 'shmup/vim-sql-syntax'
+Plug 'JuliaEditorSupport/julia-vim'
 
 " Use SQL highlighting for .SQL extension
 autocmd BufNewFile,BufRead *.SQL set syntax=sql
@@ -43,16 +47,19 @@ call plug#end()
 let g:ale_fixers = {
   \ 'javascript': ['eslint', 'prettier'],
   \ 'typescript': ['tslint', 'prettier'],
+  \ 'typescriptreact': ['tslint', 'prettier'],
   \ 'rust': ['rustfmt'],
   \ 'sql': ['sqlint'],
   \ 'scala': ['scalafmt'],
+  \ 'json': ['jq'],
 \ }
 let g:ale_linters = {
   \ 'rust': ['rls'],
   \ 'sql': ['sqlint'],
   \ 'scala': ['scalafmt'],
 \ }
-let g:ale_rust_rls_toolchain = 'stable'
+let g:ale_rust_rls_toolchain = ''
+let g:ale_rust_rls_executable = 'rust-analyzer'
 
 " FZF
 let $FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
