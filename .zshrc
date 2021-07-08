@@ -1,7 +1,8 @@
-# Path to your oh-my-zsh installation.
-export ZSH=/home/jtfell/.oh-my-zsh
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-DEFAULT_USER="jtfell"
+# Path to your oh-my-zsh installation.
+export ZSH="/Users/fellj6j/.oh-my-zsh"
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -54,6 +55,7 @@ ZSH_THEME="lambda"
 plugins=(git zsh-nvm zsh-syntax-highlighting ssh-agent)
 
 # User configuration
+ZSH_DISABLE_COMPFIX="true"
 source $ZSH/oh-my-zsh.sh
 
 # Ensure user-installed binaries take precedence
@@ -63,7 +65,7 @@ export PATH=~/.local/bin:$PATH
 # Load .bashrc if it exists
 test -f ~/.bashrc && source ~/.bashrc
 
-bindkey "^[[1;5C" forward-word  
+bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
 
 # You may need to manually set your language environment
@@ -88,17 +90,25 @@ alias pbpaste='xclip -selection clipboard -o'
 
 prompt_context () { }
 
-# branches that were touched lately 
+# branches that were touched lately
 nb() {
   git for-each-ref --sort=-committerdate refs/heads/ -- format='%(committerdate:short) %(authorname) %(refname:short)' | head -n 10
 }
 
+
 # open pr page on github for current branch
 pr () {
+  local repo=`git remote -v | grep -m 1 "(push)" | sed -e "s/.*stash.abc-dev.net.au:7999\/dsa[:/]\(.*\)\.git.*/\1/"`
+  local branch=`git name-rev --name-only HEAD`
+  echo "... creating pull request for branch \"$branch\" in \"$repo\""
+  open "https://stash.abc-dev.net.au/projects/DSA/repos/$repo/pull-requests?create&sourceBranch=$branch"
+}
+
+gh_pr () {
   local repo=`git remote -v | grep -m 1 "(push)" | sed -e "s/.*github.com[:/]\(.*\)\.git.*/\1/"`
   local branch=`git name-rev --name-only HEAD`
   echo "... creating pull request for branch \"$branch\" in \"$repo\""
-  chromium "https://github.com/$repo/pull/new/$branch?expand=1"
+  open "https://github.com/$repo/pull/new/$branch?expand=1"
 }
 
 #

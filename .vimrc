@@ -1,7 +1,6 @@
 " Syntax highlighting
 syntax on
 let g:despacio_Sunset = 1
-colorscheme miramare
 set guifont=Inconsolata
 
 " Set line numbers relative to current position
@@ -19,14 +18,19 @@ set pastetoggle=<F2>
 set undofile
 set undodir=~/.vim/undodir
 
+" Install vim plug
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
 call plug#begin('~/.vim/plugged')
 
 "
 " General plugins
 "
-Plug '/usr/bin/fzf'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-source /usr/share/doc/fzf/examples/fzf.vim
 
 Plug 'w0rp/ale'
 Plug 'itchyny/lightline.vim'
@@ -34,35 +38,32 @@ Plug 'scrooloose/nerdtree'
 Plug 'tomtom/tcomment_vim'
 
 " Lang-specific plugins
-Plug 'HerringtonDarkholme/yats.vim'
-Plug 'rust-lang/rust.vim'
 Plug 'shmup/vim-sql-syntax'
-Plug 'JuliaEditorSupport/julia-vim'
+
+" Colorschemes
+Plug 'sainnhe/edge'
+Plug 'scolsen/bernhard'
+
+call plug#end()
+
+colorscheme bernhard
 
 " Use SQL highlighting for .SQL extension
 autocmd BufNewFile,BufRead *.SQL set syntax=sql
 
-call plug#end()
-
 let g:ale_fixers = {
   \ 'javascript': ['eslint', 'prettier'],
-  \ 'typescript': ['tslint', 'prettier'],
-  \ 'typescriptreact': ['tslint', 'prettier'],
-  \ 'rust': ['rustfmt'],
+  \ 'typescript': ['eslint', 'prettier'],
   \ 'sql': ['sqlint'],
-  \ 'scala': ['scalafmt'],
   \ 'json': ['jq'],
 \ }
 let g:ale_linters = {
-  \ 'rust': ['rls'],
   \ 'sql': ['sqlint'],
-  \ 'scala': ['scalafmt'],
 \ }
-let g:ale_rust_rls_toolchain = ''
-let g:ale_rust_rls_executable = 'rust-analyzer'
 
 " FZF
 let $FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
+let g:fzf_layout = { 'down': '40%' }
 
 " Nerdtree auto-open on startup with no files
 autocmd StdinReadPre * let s:std_in=1
