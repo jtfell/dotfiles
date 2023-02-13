@@ -1,5 +1,6 @@
 " Syntax highlighting
 syntax on
+set re=0
 let g:despacio_Sunset = 1
 set guifont=Inconsolata
 
@@ -37,8 +38,23 @@ Plug 'itchyny/lightline.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'tomtom/tcomment_vim'
 
+
+"
 " Lang-specific plugins
+"
 Plug 'shmup/vim-sql-syntax'
+Plug 'othree/html5.vim'
+
+" Plug 'sheerun/vim-polyglot'
+Plug 'pangloss/vim-javascript'
+" Plug 'HerringtonDarkholme/yats.vim'
+Plug 'evanleck/vim-svelte', {'branch': 'main'}
+
+"
+" Lang server
+"
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'codechips/coc-svelte', {'do': 'npm install'}
 
 " Colorschemes
 Plug 'sainnhe/edge'
@@ -51,15 +67,22 @@ colorscheme bernhard
 " Use SQL highlighting for .SQL extension
 autocmd BufNewFile,BufRead *.SQL set syntax=sql
 
+let g:svelte_preprocessor_tags = [
+  \ { 'name': 'ts', 'tag': 'script', 'as': 'typescript' }
+  \ ]
+let g:svelte_preprocessors = ['ts', 'typescript']
+
 let g:ale_fixers = {
-  \ 'javascript': ['eslint', 'prettier'],
   \ 'typescript': ['eslint', 'prettier'],
+  \ 'javascript': ['eslint', 'prettier'],
   \ 'sql': ['sqlint'],
   \ 'json': ['jq'],
 \ }
 let g:ale_linters = {
   \ 'sql': ['sqlint'],
+  \ 'svelte': ['svelte-check'],
 \ }
+" let g:ale_linter_aliases = {'svelte': ['css', 'javascript']}
 
 " FZF
 let $FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
